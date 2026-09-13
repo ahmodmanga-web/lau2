@@ -1,0 +1,23 @@
+.dart_tool/
+.packages
+.pub/
+build/
+
+# IDEs and local configuration
+.idea/
+.vscode/
+*.iml
+
+# Flutter generated files
+android/.gradle/
+android/local.properties
+ios/Flutter/ephemeral/
+macos/Flutter/ephemeral/
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+
+# Local secrets
+.env
+*.env
+node_modules/
+dist/
