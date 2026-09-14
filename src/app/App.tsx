@@ -31,8 +31,10 @@ export default function App() {
   }, [inventory.error]);
 
   useEffect(() => {
+    if (!adminUser) return;
     void inventoryRepository.listWorkers().then(setWorkers).catch((cause) => setToast(cause instanceof Error ? cause.message : 'تعذر تحميل الموظفين'));
-  }, []);
+    void inventory.reload();
+  }, [adminUser, inventory.reload]);
 
   useEffect(() => {
     void getCurrentUser().then(async (user) => { setAdminUser(user ?? null); setAdminAllowed(await isAdmin(user ?? null)); }).catch((cause) => setAuthError(cause instanceof Error ? cause.message : 'تعذر التحقق من جلسة الدخول')).finally(() => setAuthLoading(false));
