@@ -46,7 +46,8 @@ drop policy if exists "public can read workers" on public.workers;
 drop policy if exists "public can insert workers" on public.workers;
 drop policy if exists "public can delete workers" on public.workers;
 drop policy if exists "admins can read workers" on public.workers;
-create policy "admins can read workers" on public.workers for select using (exists (select 1 from public.admin_users where user_id = auth.uid()));
+drop policy if exists "authenticated users can read workers" on public.workers;
+create policy "authenticated users can read workers" on public.workers for select to authenticated using (true);
 drop policy if exists "admins can insert workers" on public.workers;
 create policy "admins can insert workers" on public.workers for insert with check (exists (select 1 from public.admin_users where user_id = auth.uid()));
 drop policy if exists "admins can update workers" on public.workers;
@@ -82,14 +83,15 @@ for each row execute procedure public.set_tshirt_inventory_updated_at();
 
 alter table public.tshirt_inventory enable row level security;
 
--- Replace these policies with authenticated-user policies when auth is enabled.
 drop policy if exists "public can read tshirt inventory" on public.tshirt_inventory;
-create policy "public can read tshirt inventory"
-on public.tshirt_inventory for select using (true);
+drop policy if exists "authenticated users can read tshirt inventory" on public.tshirt_inventory;
+create policy "authenticated users can read tshirt inventory"
+on public.tshirt_inventory for select to authenticated using (true);
 
 drop policy if exists "public can insert tshirt inventory" on public.tshirt_inventory;
-create policy "public can insert tshirt inventory"
-on public.tshirt_inventory for insert with check (true);
+drop policy if exists "authenticated users can insert tshirt inventory" on public.tshirt_inventory;
+create policy "authenticated users can insert tshirt inventory"
+on public.tshirt_inventory for insert to authenticated with check (true);
 
 drop policy if exists "public can update tshirt inventory" on public.tshirt_inventory;
 drop policy if exists "admins can update tshirt inventory" on public.tshirt_inventory;
@@ -102,3 +104,4 @@ drop policy if exists "admins can delete tshirt inventory" on public.tshirt_inve
 create policy "admins can delete tshirt inventory"
 on public.tshirt_inventory for delete
 using (exists (select 1 from public.admin_users where user_id = auth.uid()));
+
